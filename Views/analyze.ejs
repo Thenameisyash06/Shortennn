@@ -176,7 +176,7 @@
 </head>
 <body>
     <h1><%= url.requiredUrl %></h1>
-    <h1>Shorted Url - <span id="short-link">http://localhost:8090/url/<%= url.shortedUrl %></span>
+    <h1>Shorted Url - <span id="short-link"><%= baseUrl %>/url/<%= url.shortedUrl %></span>
         <button type="button" onclick="copyLink()">Copy</button>
     </h1>
 

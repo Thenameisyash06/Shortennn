@@ -70,8 +70,10 @@ async function handleGetAnalytics(req,res){
 
 async function handleGetUrlAnalytics(req,res){
     const url = await URL.findById(req.params.id);
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const baseUrl = `${protocol}://${req.get('host')}`;
     console.log(url);
-    res.render("analyze",{url});
+    res.render("analyze",{url,baseUrl});
 }
 
 module.exports = {

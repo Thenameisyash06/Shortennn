@@ -47,12 +47,14 @@ app.use("/url",restrictToLoggedInUser,urlroute);
 app.use('/',staticRouter);
 app.get("/url/:shortedUrl",async (req,res)=>{
     const shortedUrl = req.params.shortedUrl;
+    var entry;
     const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
     const date = moment().format('YYYY-MM-DD');
     const time = moment().format('h:mm A')
+    try{
     const geo = geoip.lookup(ip);
 
-    const entry = await URL.findOneAndUpdate({shortedUrl},
+    entry = await URL.findOneAndUpdate({shortedUrl},
 {
     $push:{
         visitedHistory:{
@@ -64,8 +66,12 @@ app.get("/url/:shortedUrl",async (req,res)=>{
         }
     }
 });
-console.log(entry);
+    }catch(error){
+        console.log(error.message);
+    }finally{
+// console.log(entry);
 res.redirect(entry.requiredUrl)
+    }
 })
 
 app.listen(PORT,()=>{
