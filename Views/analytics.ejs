@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shortennn — All URLs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #FAFAF7;
+            --card: #FFFFFF;
+            --ink: #1B2333;
+            --ink-soft: #5B6472;
+            --line: #E2E5EA;
+            --accent: #E4572E;
+            --accent-ink: #FFFFFF;
+            --badge-bg: #F3F1EA;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--paper);
+            background-image: radial-gradient(circle at 1px 1px, #00000009 1px, transparent 0);
+            background-size: 22px 22px;
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 60px;
+        }
+
+        .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin: 0 0 6px;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin: 0 0 28px;
+        }
+
+        #url-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #url-list li {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            box-shadow: 0 1px 2px rgba(27, 35, 51, 0.03);
+        }
+
+        #url-list li span {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.5px;
+            color: var(--ink);
+        }
+
+        #url-list li span > span:first-of-type {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .visits {
+            flex-shrink: 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--ink-soft);
+            background: var(--badge-bg);
+            padding: 3px 9px;
+            border-radius: 999px;
+        }
+
+        #url-list li button {
+            flex-shrink: 0;
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--ink-soft);
+            font-family: 'Inter', sans-serif;
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+        }
+
+        #url-list li button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .empty {
+            list-style: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--ink-soft);
+            text-align: center;
+            justify-content: center;
+            padding: 40px 0;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+    </style>
+</head>
+<body>
+    <p class="eyebrow"> analytics</p>
+    <h1>All URLs</h1>
+
+    <ul id="url-list">
+        <% if (urls.length === 0) { %>
+            <li class="empty">No links created yet.</li>
+        <% } %>
+        <% urls.forEach(url => { %>
+            <li data-id="<%= url._id %>">
+                <span>
+                    <span><%= url.requiredUrl %></span>
+                    <span class="visits"><%= url.visitedHistory.length %> visits</span>
+                </span>
+                <div>
+                    <button onclick="window.location.href='/url/analyze/<%= url._id %>'">Analyze</button>
+                </div>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+<script>
+
+</script>
+</html>
