@@ -14,7 +14,25 @@ const {restrictToLoggedInUser} = require('./middleware/auth')
 
 const app = express();
 const PORT = 8090;
-connectToMongo("mongodb://localhost:27017/url-shortner").then(()=>console.log("mondoDb Connected")).catch((err)=>console.log(err));
+
+require('dotenv').config();
+
+const connectDB = async () => {
+  try {
+    await connectToMongo(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 10000, // 10s timeout
+    });
+    console.log('✅ MongoDB Connected');
+  } catch (error) {
+    console.error('❌ MongoDB Connection Error:', error.message);
+    process.exit(1);
+  }
+};
+
+connectDB();
+// connectToMongo("mongodb://localhost:27017/url-shortner").then(()=>console.log("mondoDb Connected")).catch((err)=>console.log(err));
 
 
 app.use(express.json());
