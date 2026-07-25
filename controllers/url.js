@@ -6,6 +6,9 @@ const {getUser} = require("../services/auth")
 async function handleGenrateShortUrl(req,res){
     const body = req.body;
 
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const baseUrl = `${protocol}://${req.get('host')}`;
+
     const s_ltr = 'qwertyuiopasdfghjklzxcvbnm';
     const c_ltr = 'QWERTYUIOPASDFGHJKLZXCVBNM';
     const num = '1234567890';
@@ -48,6 +51,7 @@ async function handleGenrateShortUrl(req,res){
     });
     return res.render("index",{
         id:shortUrl,
+        baseUrl
     })
     return res.json({id:shortUrl})
 }

@@ -11,7 +11,10 @@ router.get('/signup',(req,res)=>{
 })
 
 router.get('/index',async (req,res)=>{
-    return res.render("index");
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const baseUrl = `${protocol}://${req.get('host')}`;
+
+    return res.render("index",{baseUrl});
 })
 
 
