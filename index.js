@@ -16,7 +16,6 @@ const app = express();
 const PORT = 8090;
 
 require('dotenv').config();
-console.log(process.env.MONGO_URL)
 const connectDB = async () => {
   try {
     await connectToMongo(process.env.MONGO_URL, {
