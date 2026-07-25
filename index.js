@@ -4,7 +4,7 @@ const urlroute = require("./routes/url");
 const { connectToMongo } = require("./connection");
 // const { mongoose } = require("mongoose");
 const URL = require("./models/url")
-const moment = require('moment');
+const moment = require('moment-timezone');
 const geoip = require('geoip-lite')
 const staticRouter = require('./routes/staticrouter');
 const userRoute = require('./routes/user');
@@ -48,8 +48,8 @@ app.use("/url",restrictToLoggedInUser,urlroute);
 app.get("/r/:shortedUrl", async (req, res) => {
     const shortedUrl = req.params.shortedUrl;
     const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress;
-    const date = moment().format('YYYY-MM-DD');
-    const time = moment().format('h:mm A');
+    const date = moment().tz('Asia/Kolkata').format('YYYY-MM-DD');
+    const time = moment().tz('Asia/Kolkata').format('h:mm A');
 
     let geo;
     try {
