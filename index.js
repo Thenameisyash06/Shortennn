@@ -45,34 +45,47 @@ app.set("views",path.resolve("./Views"));
 app.use("/user",userRoute);
 app.use("/url",restrictToLoggedInUser,urlroute);
 app.use('/',staticRouter);
-app.get("/url/:shortedUrl",async (req,res)=>{
+app.get("/url/:shortedUrl", async (req, res) => {
     const shortedUrl = req.params.shortedUrl;
-    var entry;
-    const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress;
     const date = moment().format('YYYY-MM-DD');
-    const time = moment().format('h:mm A')
-    try{
-    const geo = geoip.lookup(ip);
+    const time = moment().format('h:mm A');
 
-    entry = await URL.findOneAndUpdate({shortedUrl},
-{
-    $push:{
-        visitedHistory:{
-            date,
-            time,
-            city: geo?.city || 'unknown',
-            state: geo?.region || 'unknown',
-            country: geo?.country || 'unknown'
+    let geo;
+    try {
+        geo = geoip.lookup(ip);
+    } catch (err) {
+        console.log("geoip error:", err.message);
+        geo = null;
+    }
+
+    try {
+        const entry = await URL.findOneAndUpdate(
+            { shortedUrl },
+            {
+                $push: {
+                    visitedHistory: {
+                        date,
+                        time,
+                        city: geo?.city || 'unknown',
+                        state: geo?.region || 'unknown',
+                        country: geo?.country || 'unknown'
+                    }
+                }
+            }
+        );
+
+        if (!entry || !entry.requiredUrl) {
+            console.log("No entry found for:", shortedUrl);
+            return res.status(404).send("Short URL not found");
         }
+
+        return res.redirect(entry.requiredUrl);
+    } catch (error) {
+        console.log("DB error:", error.message);
+        return res.status(500).send("Something went wrong");
     }
 });
-    }catch(error){
-        console.log(error.message);
-    }finally{
-// console.log(entry);
-res.redirect(entry.requiredUrl)
-    }
-})
 
 app.listen(PORT,()=>{
     console.log("Server Started!");
