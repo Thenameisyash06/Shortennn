@@ -43,9 +43,9 @@ app.set("views",path.resolve("./Views"));
 
 
 app.use("/user",userRoute);
-app.use("/url",restrictToLoggedInUser,urlroute);
 app.use('/',staticRouter);
-app.get("/url/:shortedUrl", async (req, res) => {
+app.use("/url",restrictToLoggedInUser,urlroute);
+app.get("/r/:shortedUrl", async (req, res) => {
     const shortedUrl = req.params.shortedUrl;
     const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress;
     const date = moment().format('YYYY-MM-DD');
